@@ -1,9 +1,11 @@
-﻿## Remotely access Jupyter Notebook on a DAS-6 cluster node
-Firstly, if the local machine is not on the TU Delft campus, connect with EduVPN using the netid.
-Go to https://tudelft.eduvpn.nl/ for more details.
-<hr>
+﻿## Remotely access Jupyter Notebook on a DAS-6 cluster node using SLURM
 The local machine used for the SSH connection runs <i>Ubuntu 20.04</i>.
 
+The connection was made to the TU Delft DAS-6 cluster ```fs3.das6.tudelft.nl``` (https://www.cs.vu.nl/das6/).
+<hr>
+
+Firstly, if the local machine is not on the TU Delft campus, connect with EduVPN using the netid.
+Go to https://tudelft.eduvpn.nl/ for more details.
 ## <b>Terminal 1</b>
 
 ```ssh <username>@fs3.das6.tudeflt.nl``` to login to the DAS-6 TUDelft cluster.
@@ -19,7 +21,7 @@ The local machine used for the SSH connection runs <i>Ubuntu 20.04</i>.
 - Run script to request SLURM job and open the jupyter notebook:  ```$ sbatch drifts.sbatch``` which is
 
 
-```
+```bash
 #!/bin/bash
 #SBATCH --time=00:15:00
 #SBATCH -N 2
@@ -34,7 +36,6 @@ node=$(hostname -s)
 user=$(whoami)
 cluster=$(hostname -f | awk -F"." '{print $2}')
 echo -e "
-# print tunneling instructions jupyter-log
 #MacOS or linux terminal command to create your ssh tunnel
 ssh -N -f -R ${port}:localhost:${port} ${user}@fs3.das6.tudelft.nl
 Remote server: ${node}
@@ -42,8 +43,8 @@ Remote port: ${port}
 SSH cluster: ${cluster}
 SSH login: $user
 SSH port: 22
-Use a browser on your local machine to go to
- localhost:${port}  (prefix with https:// if using password)
+Use a browser on your local machine to access:
+localhost:${port}  (prefix with https:// if using password)
 "
 
 ssh -N -f -R $port:localhost:$port fs3
